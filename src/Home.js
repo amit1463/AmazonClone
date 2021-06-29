@@ -8,21 +8,18 @@ const Home = () => {
     const getProducts=()=>{
         db.collection("products").onSnapshot((snapshot)=>{
             let tempProducts=[]
-            // console.log(snapshot)
             tempProducts=snapshot.docs.map((doc)=>(
                 {
                     id:doc.id,
                     product:doc.data()
                 }
             ))
-            // console.log(tempProducts)
             setProducts(tempProducts);
         })
     }
     useEffect(()=>{
         getProducts();
     },[])
-//     console.log(products);
     return (
         <Container>
             <Banner>
