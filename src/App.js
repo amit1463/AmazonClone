@@ -1,24 +1,40 @@
 import logo from './logo.svg';
 import './App.css';
-
+import { BrowserRouter as Router,Route,Switch } from 'react-router-dom';
+import Navbar from "./Navbar"
+import Cart from './Cart';
+import Home from './Home';
+import {useState,useEffect} from 'react';
+import {db} from "./Firebase"
 function App() {
+  const [cartItems,setCartItems]=useState([])
+  const getCartItems=()=>{
+    db.collection("CartItems").onSnapshot((snapshot)=>{
+      // const tempItems=[]
+      const tempItems=snapshot.docs.map((doc)=>(
+        {
+        id:doc.id,
+        product:doc.data()
+      }))
+      setCartItems(tempItems)
+    })
+  }
+  useEffect(()=>{
+    getCartItems();
+  },[])
+  // console.log(cartItems)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+        <Navbar cartItems={cartItems}/>
+        <Switch>
+        <Route exact path="/amazon-clone">
+          <Home/>
+        </Route>
+        <Route path="/cart">
+            <Cart cartItems={cartItems}/>
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
