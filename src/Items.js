@@ -6,7 +6,7 @@ const Items = ({title,price,image,id}) => {
     const addToCart=()=>{
         const cartItem=db.collection("CartItems").doc(id);
         cartItem.get().then((doc)=>{
-            console.log(doc)
+//             console.log(doc)
             if(doc.exists){
                 cartItem.update({
                     quantity:doc.data().quantity+1
